@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>Nasingngo ba Pansi?</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <multi-image-upload></multi-image-upload>
+    <hr>
+    <button ion-button block outline (click)='openPropertyDetail()' *ngIf="global.uploadid===0&&!uploadFinished">Add Location</button>
+
+     
+              <ion-list  *ngIf="global.uploadid!=0 && !uploadFinished ">
+                <ion-item (click)='openPropertyDetail()'>
+                  <ion-avatar item-left>
+                    <img src="{{ global.site }}/uploads/{{id}}.jpg"  onerror="this.src='assets/img/broken.png';" />
+                  </ion-avatar>
+                  <h2 style="font-weight: bold">{{name}}</h2>
+                  <p>{{address}}</p>
+                  
+                </ion-item>
+              </ion-list>
+
+
+              <ion-list  *ngIf="uploadFinished ">
+                <ion-item>
+                  <ion-avatar item-left>
+                    <img src="{{ global.site }}/uploads/{{id}}.jpg"  onerror="this.src='assets/img/broken.png';" />
+                  </ion-avatar>
+                  <h2 style="font-weight: bold">{{name}}</h2>
+                  <p>{{address}}</p>
+                  
+                </ion-item>
+              </ion-list>
+
+    <hr>
+    <ion-textarea [(ngModel)]="descript" placeholder="Share your Experience.." style="height:100px"  *ngIf="!uploadFinished" ></ion-textarea>
+    <ion-textarea [(ngModel)]="descript" placeholder="Share your Experience.." style="height:100px"  *ngIf="uploadFinished" readonly></ion-textarea>
+
+    <hr>
+    <div *ngIf="!multiImageUpload.isUploading && !uploadFinished">
+    <button ion-button block (click)="submit()" >
+        <ion-icon name="checkmark"></ion-icon>
+        Upload
+    </button>
+    </div>
+    <button ion-button block color="danger" *ngIf="multiImageUpload.isUploading && !uploadFinished">
+        Uploading...
+    </button>
+
+    <p style="text-align: center" *ngIf="multiImageUpload.isUploading && !uploadFinished">Uploading may take a while due to the number and size of the image(s)</p>
+    
+    <p style="text-align: center;" *ngIf="uploadFinished">Tap <ion-icon name="aperture"> to Post again</ion-icon></p>
+</ion-content>

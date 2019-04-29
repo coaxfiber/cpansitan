@@ -1,0 +1,70 @@
+<ion-content class="main-modal">
+  <div class="modal">
+
+    <ion-row>
+      <ion-col col-2>
+        <img [src]="modal_data.account.image" class="avatar-modal" alt=""> 
+      </ion-col>
+
+      <ion-col col-8>
+        <h5 style="font-weight: bold">{{ modal_data.account.name }}</h5>
+        <p *ngIf="modal_data.pansitan.name!=null" class="pansitan">{{ modal_data.pansitan.name }}</p>
+      </ion-col>
+
+      <!-- If you wish, you can add close icon too. Just delete comment code -->
+      <ion-col col-2><span style="float: right" (click)="dismiss()"><ion-icon name="ios-close-circle-outline"></ion-icon></span></ion-col>
+
+    </ion-row>
+
+      <ion-card-content style="padding:0 5px 0 5px">
+        <p  style="white-space: pre-line;margin: 0"><b>{{modal_data.account.name}}</b> {{ modal_data.descript }}</p>
+      
+        <ion-note style="font-size: 12px">
+          {{ process(modal_data.timestamp)  }}
+        </ion-note>
+        <div style="height: 5px"></div>
+      </ion-card-content>
+    <!-- Post image -->
+    <div>
+      
+        <ion-slides>
+
+        <ion-slide  style="width:100% !important"  *ngFor="let p of modal_data.images; let i = index"  no-bounce>
+            <img  style="width:100% !important" src="{{ global.site }}uploads/posts/{{ p.imageid }}.jpg" (tap)="tapPhotoLike(post)"/>
+            <p class="number">{{ i + 1 }}/{{ modal_data.images.length }}</p>
+        </ion-slide>
+
+        </ion-slides>
+    </div>
+
+    <ion-row text-center>
+      <ion-col col-3 no-margin no-padding>
+        <button clear ion-button icon-only (click)="likeButton()" class="like-btn" *ngIf="postheart(modal_data.like)!='heart' && modal_data.heart!='heart' ">
+          <ion-icon no-padding name="heart-outline" color="black" class="icon-space"></ion-icon>
+        </button>
+
+        <button clear ion-button icon-only (click)="likeButton()" class="like-btn" *ngIf="postheart(modal_data.like)==='heart'||modal_data.heart==='heart'">
+          <ion-icon no-padding name="heart" color="danger" class="icon-space"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-3 no-margin no-padding>
+        <!--<button no-margin no-padding clear color="black" ion-button icon-only (click)="goUserProfile(1)">
+          <ion-icon name="person"></ion-icon>
+        </button>-->
+      </ion-col>
+      <ion-col col-3 no-margin no-padding style="margin:0 !important">
+       
+          <button no-margin no-padding clear color="black" ion-button icon-only (click)="presentPostOwner(modal_data.postid)" *ngIf="modal_data.email == email">
+            <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-3 no-margin no-padding>
+         
+        <p class="like-content" style="margin-top: 10px" *ngIf = "modal_data.like == null;" ><ion-icon name="heart"></ion-icon> 0 hearts</p>
+        <p class="like-content" style="margin-top: 10px"*ngIf = "modal_data.like != null && modal_data.like.length==1"><ion-icon name="heart"></ion-icon> 1 heart</p>
+        <p class="like-content" style="margin-top: 10px" *ngIf = "modal_data.like != null && modal_data.like.length>1"><ion-icon name="heart"></ion-icon> {{modal_data.like.length}} hearts</p>
+      </ion-col>
+    </ion-row>
+  </div>
+
+</ion-content>

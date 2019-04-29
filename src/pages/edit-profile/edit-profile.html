@@ -1,0 +1,57 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Edit Profile</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="updateProfile()">
+        <ion-icon name="checkmark" color="primary"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <!-- Profile picture -->
+  <div text-center>
+    <img [src]="image" class="edit-avatar" alt=""  onerror="this.src='assets/img/broken.png';" >
+  </div>
+
+  <!-- Form -->
+  <ion-item>
+    <ion-label> 
+      <ion-icon name="clipboard" color="gray"></ion-icon>
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="user.name"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      <ion-icon name="quote" color="gray"></ion-icon>
+    </ion-label>
+    <ion-textarea placeholder="" [(ngModel)]="user.descript"></ion-textarea>
+  </ion-item>
+
+  <!-- Private information form -->
+  <div margin-top padding-top>
+    <h4 no-margin no-padding class="info-text">Private Information</h4>
+    <hr class="custom-hr" color="gray">
+  </div>
+  
+  <ion-item>
+    <ion-label> 
+      <ion-icon name="mail" color="gray"></ion-icon>
+    </ion-label>
+    <ion-input type="text" [value]="user.email" readonly></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label> 
+      <ion-icon name="phone-portrait" color="gray"></ion-icon>
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="user.contact" placeholder="Add your phone"></ion-input>
+  </ion-item>
+
+</ion-content>

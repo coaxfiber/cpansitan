@@ -1,0 +1,75 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{property.name}}</ion-title>
+    <ion-buttons end right>
+      <button color="black" ion-button icon-only (click)="seelocation(this.property)">
+        <ion-icon name="locate"></ion-icon> Location
+      </button>
+    </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-card *ngIf="property.pansitanid">
+        <ion-slides pager="true">
+
+        <ion-slide  *ngFor="let p of image; let i = index"  style="width:100% !important">
+            <img src="{{ global.site }}uploads/pansitan/{{ p.imageid }}.jpg"  onerror="this.src='assets/img/broken.png';"  style="width:100% !important"/>
+            <p>{{ i + 1 }}/{{ length }}</p>
+        </ion-slide>
+
+    </ion-slides>
+        <p style="position: absolute; right: 3px;margin-top: 6px">{{ratelength}} people&nbsp;&nbsp;&nbsp;</p>
+         <ionic3-star-rating 
+            activeIcon = "ios-star"
+            defaultIcon = "ios-star-outline"
+            activeColor = "#488aff" 
+            defaultColor = "#488aff"
+            readonly="true"
+            [rating]="finalrate">
+        </ionic3-star-rating> 
+        <!--<img src="{{property.picture}}"/>-->
+        <ion-card-content>
+            <h2 class="card-title"><b>{{property.name}}</b></h2>
+            <p>{{property.address}}</p>
+        </ion-card-content>
+        <ion-list>
+            <ion-item *ngIf="property.contact!=''">
+                <ion-icon item-left name="call"></ion-icon>
+                <h3>Contact</h3>
+                <ion-note item-right>{{property.contact}}</ion-note>
+            </ion-item>
+            <ion-item  *ngIf="property.prices!=''">
+                <ion-icon item-left name="pricetag"></ion-icon>
+                <h3>Prices</h3>
+                <ion-note item-right>{{property.prices}}</ion-note>
+            </ion-item>
+            <ion-item *ngIf="property.specialty!=''">
+                <ion-icon item-left name="list-box"></ion-icon>
+                <h3>Specialty</h3>
+                <ion-note item-right>{{property.specialty}}</ion-note>
+            </ion-item>
+            <ion-item>
+                <ion-icon item-left name="pricetag"></ion-icon>
+                <h3>Your rate</h3>
+                <ion-note item-right>
+                    <ionic3-star-rating 
+                        activeIcon = "ios-star"
+                        defaultIcon = "ios-star-outline"
+                        activeColor = "#488aff" 
+                        defaultColor = "#488aff"
+                        readonly="{{ ctrrate }}"
+                        [rating]="yourrate">
+                    </ionic3-star-rating> 
+                </ion-note>
+            </ion-item>
+            <ion-item>
+                <button ion-button block  style="width: 100%;" *ngIf="checkfav==0" (click)="favorites()">Add to Favorites</button>
+                <button ion-button block outline  style="width: 100%;" *ngIf="checkfav==1"  (click)="favorites()">Remove from Favorites</button>
+            </ion-item>
+        </ion-list>
+
+        
+
+    </ion-card>
+</ion-content>

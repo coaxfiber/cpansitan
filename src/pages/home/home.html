@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-navbar color="white">
+    <!--<ion-buttons start left>
+      <button color="black" ion-button icon-only>
+        <ion-icon name="camera"></ion-icon>
+      </button>
+    </ion-buttons>-->
+    
+    <ion-title style="border: 1px solid #ccc" (click)="scrollToTop()">Pansitan</ion-title>
+
+    <ion-buttons end right>
+      <!--<button color="black" ion-button icon-only (click)="goMessages()">
+        <ion-icon name="paper-plane"></ion-icon>
+      </button>
+      <button color="black" ion-button icon-only (click)="goMessages()">
+      <ion-icon name="person"></ion-icon>
+      <ion-icon name="search"></ion-icon>
+      </button>-->
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <p style="margin-left: 5px;margin-top: 5px;margin-bottom: 1px;">Top 15 Rated Pansitans</p>
+  <p style="text-align: center;" *ngIf="loadp===0"><ion-spinner name="dots" ></ion-spinner></p>
+  <p style="text-align: center;" *ngIf="loadp===2">Connection Error!</p>
+  <ion-scroll class="story" scrollX="true"  *ngIf="loadp===1">
+    <div class="story_scroll" *ngFor="let s of top" (click)="openPropertyDetail(s)">
+      <div class="story_img_bg">
+      <img no-margin no-padding class="story_img" src="{{ global.site }}/uploads/{{s.pansitanid}}.jpg" onerror="this.src='assets/img/broken.png';" ></div>
+      <p no-margin no-padding text-center class="story_text">{{ s.name }}</p>
+    </div>
+  </ion-scroll>
+  <!-- Story line 
+  <ion-scroll class="story" scrollX="true">
+    <div class="story_scroll" *ngFor="let s of stories">
+      <div class="story_img_bg">
+      <img no-margin no-padding class="story_img" [src]="s.img"></div>
+      <p no-margin no-padding text-center class="story_text">{{ s.user_name }}</p>
+    </div>
+  </ion-scroll>
+  <div (swipe)="swipePage($event)">
+-->
+  <hr no-margin no-padding>
+  <div>
+
+    <!-- Cards -->
+    <div  *ngIf="loadpost===1">
+    <ion-card no-padding no-margin class="card"  *ngFor="let post of posts; let x = index"  >
+
+      <ion-row>
+        <ion-col col-10>
+          <ion-item style="padding-left:0px;">
+        <ion-avatar item-left>
+          <img src="{{ post.account.image }}">
+        </ion-avatar>
+        <h2 style="font-weight: bold">{{ post.account.name }}</h2>
+        <p *ngIf="post.pansitan.name!=null" (click)="gotopansitan(post.pansitan)">{{ post.pansitan.name }}</p>
+        
+      </ion-item>
+        </ion-col >
+        <ion-col col-2>
+          <button no-margin no-padding clear color="black" ion-button icon-only style="float: right; top: 15px" (click)="presentPostPopover()" *ngIf="post.email != email">
+            <ion-icon name="more"></ion-icon>
+        </button>
+          <button no-margin no-padding clear color="black" ion-button icon-only style="float: right; top: 15px" (click)="presentPostOwner(post.postid)" *ngIf="post.email == email">
+            <ion-icon name="more"></ion-icon>
+        </button>
+        </ion-col>
+      </ion-row>
+        <div style="margin: 0 5px 0 5px">
+        <p  style="white-space: pre-line;">{{ post.descript }}</p>
+        
+        <ion-note style="font-size: 12px;">
+          {{ process(post.timestamp)  }}
+        </ion-note>
+        </div>
+        <div style="height: 5px"></div>
+        <div *ngIf="post.images!=null" >
+        <div *ngIf="post.images.length===1" >
+        <img src="{{ global.site }}uploads/posts/{{ post.images[0].imageid }}.jpg" (tap)="tapPhotoLike(post,x)" onerror="this.src='assets/img/broken.png';" />
+        </div>
+        <ion-slides  *ngIf="post.images.length>1" pager='true' style="width:100% !important">
+
+        <ion-slide   *ngFor="let p of post.images; let i = index"  no-bounce>
+            <img src="{{ global.site }}uploads/posts/{{ p.imageid }}.jpg" (tap)="tapPhotoLike(post,x)"  onerror="this.src='assets/img/broken.png';" style="width:100% !important"/>
+            <p>{{ i + 1 }}/{{ post.images.length }}</p>
+        </ion-slide>
+
+        </ion-slides>
+        </div>
+
+      <p no-margin no-padding>
+        <button clear ion-button icon-only (click)="likeButton(post,x)" class="like-btn" *ngIf="postheart(x,post.like)!='heart' || post.heart!='heart'">
+          <ion-icon no-padding name="{{post.heart}}" color="{{post.color}}" class="icon-space"></ion-icon>
+        </button>
+        <button clear ion-button icon-only class="like-btn" *ngIf="postheart(x,post.like)=='heart' || post.heart=='heart'">
+          <ion-icon no-padding name="heart" color="danger" class="icon-space"></ion-icon>
+        </button>
+        <button clear style="float: right;background-color:white;margin-top: 7px ">
+          <p class="like-content" *ngIf = "post.like == null;"><ion-icon name="heart"></ion-icon> 0 hearts</p>
+          <p class="like-content" *ngIf = "post.like != null && post.like.length==1"><ion-icon name="heart"></ion-icon> 1 heart</p>
+          <p class="like-content" *ngIf = "post.like != null && post.like.length>1"><ion-icon name="heart"></ion-icon> {{post.like.length}} hearts
+        </button>
+        <!--<button clear ion-button icon-only>
+          <ion-icon no-padding isActive="false" color="black" name="ios-text-outline" class="icon-space" style="font-weight: bold"></ion-icon>
+        </button>
+        <button clear ion-button icon-only>
+          <ion-icon no-padding isActive="false" color="black" name="paper-plane" class="icon-space"></ion-icon>
+        </button>
+        <button no-margin no-padding clear color="black" ion-button icon-only style="float: right">
+          <ion-icon name="ios-bookmark-outline"></ion-icon>
+        </button>-->
+      </p>
+      <hr style="margin: 0">
+        
+
+    </ion-card>
+    <button ion-button block outline  style="width: 95%;margin: 10px" (click)="seemore()">See More</button>
+</div>
+
+  <p style="text-align: center;"  *ngIf="loadpost===0"> <ion-spinner name="crescent"></ion-spinner></p>
+  <p style="text-align: center;" *ngIf="loadpost===2">Connection Error!</p>
+  </div>
+
+
+     <ion-fab style="right: 3px !important;bottom: 3px !important">
+        <button ion-fab item-right style="right: 0;" (click) = "reset()"><ion-icon name="md-refresh"></ion-icon></button>
+     </ion-fab>
+</ion-content>
